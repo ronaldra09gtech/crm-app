@@ -20,8 +20,8 @@ export class TopBanner extends Component {
             <Container className='topContent'>
               <Row>
                 <Col className='text-center'>
-                  <h1 className="topTitle">80Tech</h1>
-                  <h4 className="topSubTitle">Technology Innovation Services</h4>
+                  <h1 className="topTitle">Ronald Avila</h1>
+                  <h4 className="topSubTitle">IT Professional Service Provider</h4>
                   <Button variant='primary'>Learn More</Button>
                 </Col>
               </Row>
