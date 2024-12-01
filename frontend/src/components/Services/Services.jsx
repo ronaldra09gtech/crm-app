@@ -1,50 +1,71 @@
-import React, { 
-    Component, 
-    Fragment 
-} from 'react'
-import { 
-    Container,
-    Row,
-    Col,
-} from 'react-bootstrap'
+import React, { Component, Fragment } from 'react'
+import { Col, Container, Row } from 'react-bootstrap'
 import designIcon from '../../asset/image/design.png';
 import ecommerceIcon from '../../asset/image/ecommerce.png';
 import webIcon from '../../asset/image/web.png';
+import RestClient from '../../RestAPI/RestClient';
+import AppUrl from '../../RestAPI/AppUrl';
+import Loading from '../Loading/Loading';
+import Zoom from 'react-reveal/Zoom';
+import LightSpeed from 'react-reveal/LightSpeed';
+class Services extends Component {
 
-export class Services extends Component {
-  render() {
-    return (
-      <Fragment>
-        <Container className='text-center'>
-            <h1 className="serviceMainTitle">MY SERVICES</h1>
-            <div className='bottom'></div>
-            <Row> 
-                <Col lg={4} md={6} sm={12}>
-                    <div className='serviceCard text-center'>
-                        <img className="ecommerceIcon" src={ecommerceIcon} alt="ecommerce"/>
-                        <h2 className='serviceName'>Ecommerce</h2>
-                        <p className='serviceDescription'>I will design and develop ecommerce online store website</p>
-                    </div>
-                </Col>
-                <Col lg={4} md={6} sm={12}>
-                    <div className='serviceCard text-center'>
-                        <img className="designIcon"src={designIcon} alt="design"/>
-                        <h2 className='serviceName'>Web Design</h2>
-                        <p className='serviceDescription'>Qualified web design and attractive effects which catches visitor's Eye.</p>
-                    </div>
-                </Col>
-                <Col lg={4} md={6} sm={12}>
-                    <div className='serviceCard text-center'>
-                        <img className="webIcon" src={webIcon} alt="web"/>
-                        <h2 className='serviceName'>Web Development</h2>
-                        <p className='serviceDescription'>Clean and fresh issue free code to make your website dynamic perfectly.</p>
-                    </div>
-                </Col>
-            </Row>
-        </Container>
-      </Fragment>
-    )
-  }
+     constructor(){
+          super();
+          this.state={
+               myData:[],
+               loading:true 
+          }
+     }
+
+     componentDidMount(){
+          RestClient.GetRequest(AppUrl.Services).then(result=>{
+               this.setState({myData:result,loading:false});
+          }) 
+     }
+
+
+     render() {
+
+          if(this.state.loading == true){
+               return <Loading />
+          }
+          else{ 
+
+          const MyList = this.state.myData;
+          const MyView = MyList.map(MyList=>{
+          
+          return <Col lg={4} md={6} sm={12}>
+               <Zoom top>
+              <div className="serviceCard text-center">
+                  <img className="ecommerceIcon" src={MyList.service_logo} /> 
+                  <h2 className="serviceName">{MyList.service_name}</h2>
+                  <p className="serviceDescription">{MyList.service_discription}</p>
+              </div>
+              </Zoom>
+               </Col>  
+
+          })
+
+
+          return (
+<Fragment>
+     <Container className="text-center">
+     <LightSpeed top>
+          <h1 className="serviceMainTitle">MY SERVICES</h1>
+               <div className="bottom"></div>
+               </LightSpeed>
+          <Row>  
+
+                {MyView}
+              
+          </Row>
+     </Container>
+
+</Fragment>
+          )
+       } // end Else
+     }
 }
 
 export default Services
